@@ -1,10 +1,10 @@
-use crate::models::BidAskPair;
 use binance::api::*;
 use binance::config::Config;
-use binance::futures::account::FuturesAccount;
+use binance::futures::account::{FuturesAccount};
 use std::sync::mpsc::Receiver;
 use std::thread;
 
+use crate::agents::binance_market_making::models::BidAskPair;
 enum ACTION {
     RequoteBid,
     RequoteAsk,
@@ -39,17 +39,17 @@ pub fn start_automated_liquidity_provider(
             };
             match action {
                 ACTION::RequoteAsk => {
-                    // pull(&account);
-                    // trade(&account, -BASE_QTY, new_market_quote.best_ask + EDGE);
+                    pull(&account);
+                    trade(&account, -BASE_QTY, new_market_quote.best_ask + EDGE);
                 }
                 ACTION::RequoteBid => {
-                    // pull(&account);
-                    // trade(&account, BASE_QTY, new_market_quote.best_bid - EDGE);
+                    pull(&account);
+                    trade(&account, BASE_QTY, new_market_quote.best_bid - EDGE);
                 }
                 ACTION::RequoteBoth => {
-                    // pull(&account);
-                    // trade(&account, -BASE_QTY, new_market_quote.best_ask + EDGE);
-                    // trade(&account, BASE_QTY, new_market_quote.best_bid - EDGE);
+                    pull(&account);
+                    trade(&account, -BASE_QTY, new_market_quote.best_ask + EDGE);
+                    trade(&account, BASE_QTY, new_market_quote.best_bid - EDGE);
                 }
                 ACTION::NOOP => (),
             }
@@ -60,12 +60,13 @@ pub fn start_automated_liquidity_provider(
 
 fn pull(account: &FuturesAccount) {
     match account.cancel_all_open_orders("BTCUSDT") {
-        Ok(answer) => println!("{:?}", answer),
+        Ok(_) => println!("Pulled"),
         Err(e) => println!("Error: {:?}", e),
     }
 }
 
 fn trade(account: &FuturesAccount, qty: f64, price: f64) {
+
     if qty < 0.0 {
         match account.limit_sell(
             "BTCUSDT".to_string(),
@@ -73,7 +74,7 @@ fn trade(account: &FuturesAccount, qty: f64, price: f64) {
             price.round(),
             binance::futures::account::TimeInForce::GTX,
         ) {
-            Ok(answer) => println!("{:?}", answer),
+            Ok(_) => println!("Requote ask"),
             Err(e) => println!("Error: {:?}", e),
         }
     } else if qty > 0.0 {
@@ -83,7 +84,7 @@ fn trade(account: &FuturesAccount, qty: f64, price: f64) {
             price.round(),
             binance::futures::account::TimeInForce::GTX,
         ) {
-            Ok(answer) => println!("{:?}", answer),
+            Ok(_) => println!("Requote bid"),
             Err(e) => println!("Error: {:?}", e),
         }
     };

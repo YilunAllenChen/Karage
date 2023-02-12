@@ -19,6 +19,7 @@ pub fn start_position_monitor(
 
     thread::spawn(move || {
         loop {
+            let _ = account.position_information("BTCUSDT");
             thread::sleep(Duration::from_secs(1));
         }
     })
