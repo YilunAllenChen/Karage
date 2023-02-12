@@ -1,6 +1,3 @@
-use std::sync::mpsc;
-use std::thread::JoinHandle;
-
 mod automated_liquidity_provider;
 mod market_data_provider;
 // mod position_monitor;
@@ -9,12 +6,15 @@ use automated_liquidity_provider::start_automated_liquidity_provider;
 use market_data_provider::start_market_data_provider;
 // pub use position_monitor::start_position_monitor;
 
+
+
+use std::sync::mpsc;
+use std::thread::JoinHandle;
+
 use binance::config::Config;
 use dotenv_codegen::dotenv;
 
-#[path ="../../models/mod.rs"]
-mod models;
-use models::BidAskPair;
+use crate::libs::models::BidAskPair;
 
 pub fn binance_market_making() -> Vec<JoinHandle<()>>{
     let key = dotenv!("BINANCE_API_KEY").to_owned();

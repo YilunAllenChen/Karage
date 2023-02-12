@@ -4,7 +4,7 @@ use binance::futures::account::{FuturesAccount};
 use std::sync::mpsc::Receiver;
 use std::thread;
 
-use crate::agents::binance_market_making::models::BidAskPair;
+use crate::libs::models::BidAskPair;
 enum ACTION {
     RequoteBid,
     RequoteAsk,

@@ -4,7 +4,7 @@ use std::sync::mpsc::Sender;
 use std::thread;
 
 
-use crate::agents::binance_market_making::models::BidAskPair;
+use crate::libs::models::BidAskPair;
 
 pub fn start_market_data_provider(config: &Config, sender: Sender<BidAskPair>) -> thread::JoinHandle<()> {
     let local_config = config.clone();
