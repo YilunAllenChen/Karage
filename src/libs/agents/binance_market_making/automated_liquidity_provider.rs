@@ -12,8 +12,9 @@ enum ACTION {
     NOOP,
 }
 
-static EDGE: f64 = 10.0;
-static BASE_QTY: f64 = 0.01;
+static EDGE: f64 = 50.0;
+static MIN_EDGE: f64 = EDGE * 0.05;
+static BASE_QTY: f64 = 0.1;
 
 pub fn start_automated_liquidity_provider(
     key: &String,
@@ -29,8 +30,8 @@ pub fn start_automated_liquidity_provider(
         let mut last_quote = BidAskPair::new(0.0, 0.0);
         for new_market_quote in receiver {
             let action = match (
-                new_market_quote.best_ask == last_quote.best_ask,
-                new_market_quote.best_bid == last_quote.best_bid,
+                (new_market_quote.best_ask-last_quote.best_ask).abs() < MIN_EDGE,
+                (new_market_quote.best_bid-last_quote.best_bid).abs() < MIN_EDGE,
             ) {
                 (false, false) => ACTION::RequoteBoth,
                 (true, false) => ACTION::RequoteBid,
@@ -39,21 +40,28 @@ pub fn start_automated_liquidity_provider(
             };
             match action {
                 ACTION::RequoteAsk => {
+                    let our_new_ask_quote = new_market_quote.best_ask + EDGE;
                     pull(&account);
-                    trade(&account, -BASE_QTY, new_market_quote.best_ask + EDGE);
+                    trade(&account, -BASE_QTY, our_new_ask_quote);
+                    last_quote.best_ask = our_new_ask_quote;
                 }
                 ACTION::RequoteBid => {
+                    let our_new_bid_quote = new_market_quote.best_bid - EDGE;
                     pull(&account);
-                    trade(&account, BASE_QTY, new_market_quote.best_bid - EDGE);
+                    trade(&account, BASE_QTY, our_new_bid_quote);
+                    last_quote.best_bid = our_new_bid_quote;
                 }
                 ACTION::RequoteBoth => {
+                    let our_new_bid_quote = new_market_quote.best_bid - EDGE;
+                    let our_new_ask_quote = new_market_quote.best_ask + EDGE;
                     pull(&account);
-                    trade(&account, -BASE_QTY, new_market_quote.best_ask + EDGE);
-                    trade(&account, BASE_QTY, new_market_quote.best_bid - EDGE);
+                    trade(&account, -BASE_QTY, our_new_ask_quote);
+                    trade(&account, BASE_QTY, our_new_bid_quote);
+                    last_quote.best_bid = our_new_bid_quote;
+                    last_quote.best_ask = our_new_ask_quote;
                 }
                 ACTION::NOOP => (),
             }
-            last_quote = new_market_quote;
         }
     })
 }
