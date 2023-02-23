@@ -1,5 +1,6 @@
 [workspace]
 
 members = [
-    "karage"
+    "webull-rs",
+    "webull-trader"
 ]
