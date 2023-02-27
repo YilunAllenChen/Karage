@@ -14,3 +14,6 @@ http-body-util = "0.1.0-rc.2"
 reqwest = "0.11.14"
 serde = "1.0.152"
 serde_json = "1.0"
+tungstenite = {version = "0.16.0", features = ["native-tls"]}
+url = "2.2.2"
+alpacars = { path = "../alpacars" }
