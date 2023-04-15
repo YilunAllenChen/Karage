@@ -54,12 +54,14 @@ impl WSClient {
         }
     }
 
-    pub fn subscribe(&mut self) -> Result<String, ClientError> {
+    pub fn subscribe(&mut self, pairs: Vec<String>) -> Result<String, ClientError> {
+        let r = format!("{:?}", pairs);
+        println!("{}", r);
         self.websocket
             .write_message(Message::Text(
                 r#"{
                 "action": "subscribe",
-                "quotes": ["BTC/USD", "ETH/USD"]
+                "quotes": ["BTC/USD", "ETH/USD", "ETH/BTC"]
             }"#
                 .into(),
             ))
