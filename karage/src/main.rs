@@ -34,7 +34,7 @@ fn check_arb(prices: &HashMap<String, Quote>) -> Option<ArbAction> {
     };
     let div = eth.px / btc.px;
     let _spread = (div - ethbtc.px).abs();
-    println!("{:?}", _spread);
+    println!("spread: {:?}", _spread);
     let buy_eth = fund / eth.px;
     let buy_btc = fund / btc.px;
     let buy_ethbtc = buy_eth / ethbtc.px;
@@ -52,8 +52,8 @@ fn check_arb(prices: &HashMap<String, Quote>) -> Option<ArbAction> {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // let mut client = Client::new(dotenv!("ALPACA_API_KEY"), dotenv!("ALPACA_API_SECRET"));
     
-    let coin1 = "SOL".to_string();
-    let coin2 = "MATIC".to_string();
+    let coin1 = "BTC".to_string();
+    let coin2 = "ETH".to_string();
     let p1 = coin1.clone() + "/USD";
     let p2 = coin2.clone() + "/USD";
     let cc = coin1 + "/" + coin2.as_str();
