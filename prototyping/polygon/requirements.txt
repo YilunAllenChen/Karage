@@ -1,6 +1,0 @@
-polygon-api-client
-pydotenv
-scipy
-pandas
-numpy
-pymongo[srv]
