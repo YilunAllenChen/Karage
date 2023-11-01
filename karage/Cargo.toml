@@ -6,14 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-binance = { git = "https://github.com/wisespace-io/binance-rs.git" }
-dotenv_codegen = "0.15.0"
-hyper = { version = "1.0.0-rc.2", features = ["full"] }
+apca = "0.27.2"
 tokio = { version = "1", features = ["full"] }
-http-body-util = "0.1.0-rc.2"
-reqwest = "0.11.14"
-serde = "1.0.152"
-serde_json = "1.0"
-tungstenite = {version = "0.16.0", features = ["native-tls"]}
-url = "2.2.2"
-alpacars = { path = "../alpacars" }
+num-decimal = {version = "0.2.4", default-features = false, features = ["num-v04", "serde"]}
+dotenv = "0.15.0"
+futures = "0.3.29"
