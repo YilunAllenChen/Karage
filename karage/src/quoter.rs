@@ -33,9 +33,9 @@ async fn quote(client: &Client, ticker: &str, around: &Num, spread: &Num, quanti
 }
 
 pub async fn quoter(client: Client, ticker: String, mut rx: Receiver<Quote>) {
-    let spread = Num::new(1, 1);
-    let sensitivity = Num::new(3, 2);
-    let qty = Num::new(1, 1);
+    let spread = Num::new(1, 4);
+    let sensitivity = Num::new(2, 1);
+    let qty = Num::new(5, 1);
     let mut last_theo: Option<Num> = None;
 
     while let Some(message) = rx.recv().await {

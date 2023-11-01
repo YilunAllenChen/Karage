@@ -1,8 +1,8 @@
 use apca::{
     data::v2::stream::{drive, Bar, Data, MarketData, Quote, RealtimeData, Trade, IEX},
-    Client, Error,
+    Client,
 };
-use futures::{stream::iter, FutureExt, StreamExt, TryStreamExt};
+use futures::{FutureExt, StreamExt};
 use tokio::sync::mpsc::Sender;
 
 pub async fn stream_market_data(client: Client, tickers: Vec<String>, sender: Sender<Quote>) {
